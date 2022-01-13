@@ -1,0 +1,278 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: items; Type: TABLE; Schema: public; Owner: vitalypastukhov
+--
+
+CREATE TABLE public.items (
+    id integer NOT NULL,
+    description character varying(80),
+    manufacturer character varying(80) NOT NULL,
+    category character varying(80) NOT NULL,
+    weight double precision NOT NULL,
+    height double precision NOT NULL,
+    length double precision NOT NULL,
+    width double precision NOT NULL,
+    image_ref character varying(500)
+);
+
+
+ALTER TABLE public.items OWNER TO vitalypastukhov;
+
+--
+-- Name: items_id_seq; Type: SEQUENCE; Schema: public; Owner: vitalypastukhov
+--
+
+CREATE SEQUENCE public.items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.items_id_seq OWNER TO vitalypastukhov;
+
+--
+-- Name: items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER SEQUENCE public.items_id_seq OWNED BY public.items.id;
+
+
+--
+-- Name: warehouse_items; Type: TABLE; Schema: public; Owner: vitalypastukhov
+--
+
+CREATE TABLE public.warehouse_items (
+    id integer NOT NULL,
+    warehouse_id integer NOT NULL,
+    item_id integer NOT NULL,
+    location character varying(120) NOT NULL,
+    quantity integer NOT NULL,
+    tariff double precision NOT NULL,
+    source character varying(240) NOT NULL,
+    destination character varying(240) NOT NULL,
+    estimated_delivery date NOT NULL
+);
+
+
+ALTER TABLE public.warehouse_items OWNER TO vitalypastukhov;
+
+--
+-- Name: warehouse_items_id_seq; Type: SEQUENCE; Schema: public; Owner: vitalypastukhov
+--
+
+CREATE SEQUENCE public.warehouse_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.warehouse_items_id_seq OWNER TO vitalypastukhov;
+
+--
+-- Name: warehouse_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER SEQUENCE public.warehouse_items_id_seq OWNED BY public.warehouse_items.id;
+
+
+--
+-- Name: warehouses; Type: TABLE; Schema: public; Owner: vitalypastukhov
+--
+
+CREATE TABLE public.warehouses (
+    id integer NOT NULL,
+    name character varying(80),
+    country character varying(80) NOT NULL,
+    city character varying(80) NOT NULL,
+    address character varying(120) NOT NULL
+);
+
+
+ALTER TABLE public.warehouses OWNER TO vitalypastukhov;
+
+--
+-- Name: warehouses_id_seq; Type: SEQUENCE; Schema: public; Owner: vitalypastukhov
+--
+
+CREATE SEQUENCE public.warehouses_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.warehouses_id_seq OWNER TO vitalypastukhov;
+
+--
+-- Name: warehouses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER SEQUENCE public.warehouses_id_seq OWNED BY public.warehouses.id;
+
+
+--
+-- Name: items id; Type: DEFAULT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.items ALTER COLUMN id SET DEFAULT nextval('public.items_id_seq'::regclass);
+
+
+--
+-- Name: warehouse_items id; Type: DEFAULT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.warehouse_items ALTER COLUMN id SET DEFAULT nextval('public.warehouse_items_id_seq'::regclass);
+
+
+--
+-- Name: warehouses id; Type: DEFAULT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.warehouses ALTER COLUMN id SET DEFAULT nextval('public.warehouses_id_seq'::regclass);
+
+
+--
+-- Data for Name: items; Type: TABLE DATA; Schema: public; Owner: vitalypastukhov
+--
+
+COPY public.items (id, description, manufacturer, category, weight, height, length, width, image_ref) FROM stdin;
+11	Oven	Bosch	Appliances	10	5	1	3	empty
+12	Microwave	LG	Appliances	2	3	0.5	1	empty
+13	Fridge	KitchenAid	Appliances	50	10	5	5	empty
+14	Dishwasher	Bosch	Appliances	10	10	2	5	empty
+15	Cooktop	Miele	Appliances	12	6	3	5	empty  
+\.
+
+
+--
+-- Data for Name: warehouse_items; Type: TABLE DATA; Schema: public; Owner: vitalypastukhov
+--
+
+COPY public.warehouse_items (id, warehouse_id, item_id, location, quantity, tariff, source, destination, estimated_delivery) FROM stdin;
+111	7	12	5B	3	150	286 Bay Meadows Ave. Oak Ridge, TN 37830	34 E. Mayfield Street Coaldale, AB T1M 0G6	4/21/2022
+112	8	13	7D	5	250	591 East Foxrun Rd. Yuma, AZ 85365	75 Lower River Lane Caledonia, ON N3W 7C7	5/12/2022
+113	7	11	14E	10	50	44 Manor St.Houston, TX 77016	1 Pheasant St.Gagetown, NB E5M 9B6	3/08/2022
+114	8	15	21X	2	100	77 Oakwood Drive Cornelius, NC 28031	946 Mayfair Street Port Hope, ON L1A 9E5	7/30/2022
+\.
+
+
+--
+-- Data for Name: warehouses; Type: TABLE DATA; Schema: public; Owner: vitalypastukhov
+--
+
+COPY public.warehouses (id, name, country, city, address) FROM stdin;
+7	500CAN	Canada	Toronto	65 Bloor Street
+8	523USA	United States	Washington,DC	4 Main Street
+\.
+
+
+--
+-- Name: items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vitalypastukhov
+--
+
+SELECT pg_catalog.setval('public.items_id_seq', 1, false);
+
+
+--
+-- Name: warehouse_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vitalypastukhov
+--
+
+SELECT pg_catalog.setval('public.warehouse_items_id_seq', 1, false);
+
+
+--
+-- Name: warehouses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vitalypastukhov
+--
+
+SELECT pg_catalog.setval('public.warehouses_id_seq', 1, false);
+
+
+--
+-- Name: items items_description_key; Type: CONSTRAINT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.items
+    ADD CONSTRAINT items_description_key UNIQUE (description);
+
+
+--
+-- Name: items items_pkey; Type: CONSTRAINT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.items
+    ADD CONSTRAINT items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: warehouse_items warehouse_items_pkey; Type: CONSTRAINT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.warehouse_items
+    ADD CONSTRAINT warehouse_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: warehouses warehouses_name_key; Type: CONSTRAINT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.warehouses
+    ADD CONSTRAINT warehouses_name_key UNIQUE (name);
+
+
+--
+-- Name: warehouses warehouses_pkey; Type: CONSTRAINT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.warehouses
+    ADD CONSTRAINT warehouses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: warehouse_items warehouse_items_item_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.warehouse_items
+    ADD CONSTRAINT warehouse_items_item_id_fkey FOREIGN KEY (item_id) REFERENCES public.items(id);
+
+
+--
+-- Name: warehouse_items warehouse_items_warehouse_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: vitalypastukhov
+--
+
+ALTER TABLE ONLY public.warehouse_items
+    ADD CONSTRAINT warehouse_items_warehouse_id_fkey FOREIGN KEY (warehouse_id) REFERENCES public.warehouses(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
